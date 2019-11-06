@@ -1,39 +1,27 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import VuexSaga from 'vuex-saga';
-import { call, put } from 'vuex-saga'
-import request from '../utils/request';
+import login from './login';
+
+const context = require.context('./', false, /\.js$/);
+const keys = context.keys().filter(item => item !== './index.js');
+
+const modules = {};
+for (let i = 0; i < keys.length; i += 1) {
+  const model = context(keys[i]).default;
+  modules[model.name] = model;
+}
 
 Vue.use(Vuex);
 
-async function login(userInfo) {
-  return request(`http://localhost:8080/api/auth/doLogin`, {
-    method: 'POST',
-    body: userInfo
-  })
-}
 const store = new Vuex.Store({
   state: {
   },
   mutations: {
-    AUTH_USER_LOGIN: (state, { info }) => {
-      state.authedUser = info;
-    }
   },
   actions: {
-  	*login(state, { userInfo }) {
-      const data = yield call(login, userInfo);
-      if(data.authedUser) {
-        yield put({
-          type: 'AUTH_USER_LOGIN',
-          info: data.authedUser
-        })
-      }
-  	}
   },
-  modules: {
-    
-  },
+  modules,
 });
 
 Vue.use(VuexSaga, { store: store })

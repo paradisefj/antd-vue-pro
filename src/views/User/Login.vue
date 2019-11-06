@@ -28,6 +28,7 @@
         />
       </a-form-item>
       <a-button @click="handleSubmit">登录</a-button>
+      <span>{{userInfo.userNm}}</span>
     </a-form>
 
 </template>
@@ -39,7 +40,11 @@ export default {
   data() {
     return {
       form: this.$form.createForm(this, { name: 'coordinated' }),
+      userInfo: this.$store.state.login.authedUser || {},
     }
+  },
+  computed: {
+    
   },
   created() {
     
@@ -47,10 +52,7 @@ export default {
   methods: {
     handleSubmit(e) {
       const userInfo = this._data.form.getFieldsValue();
-      console.log(userInfo);
-      //debugger;
-      //this.$store.dispatch('login', userInfo);
-      this.$run("login", { userInfo });
+      this.$run("login/login", { userInfo });
     }
   }
 }
