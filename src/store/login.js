@@ -1,8 +1,10 @@
-import { call, put } from 'vuex-saga'
+import { call, put } from 'vuex-saga';
+import VueRouter from 'vue-router';
 import request from '../utils/request';
+import router from '../router';
 
 async function login(userInfo) {
-  return request(`http://localhost:8080/api/auth/doLogin`, {
+  return request(`/api/auth/doLogin`, {
     method: 'POST',
     body: userInfo
   })
@@ -10,9 +12,11 @@ async function login(userInfo) {
 export default {
   namespaced: true,
   name: 'login',
+  state: {
+    authedUser: {}
+  },
   mutations: {
     AUTH_USER_LOGIN: (state, { info }) => {
-      console.log('mutation', info);
       state.authedUser = info;
     }
   },
@@ -20,11 +24,11 @@ export default {
     *login(state, { userInfo }) {
       const data = yield call(login, userInfo);
       if(data.authedUser) {
-        console.log('action', data);
         yield put({
           type: 'login/AUTH_USER_LOGIN',
           info: data.authedUser
-        })
+        });
+        router.push("/search");
       }
     }
   },
