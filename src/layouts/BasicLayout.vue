@@ -15,7 +15,7 @@
         </a-sub-menu>
         <a-menu-item 
           v-for="item in menus" 
-          :kay="item.menuId"
+          :key="item.menuId"
           v-if="!(item.children && item.children.length)">
           <router-link v-bind:to="item.path">{{item.name}}</router-link>
         </a-menu-item>
@@ -27,21 +27,25 @@
   </a-row>
 </template>
 <script>
+import { mapState } from 'vuex';
+
 export default {
+  created() {
+    this.$run('login/getCurrentUser')
+  },
+  computed: {
+    ...mapState({
+      menus: state => state.login.authedUser.authObjMap && state.login.authedUser.authObjMap.MENU || [],
+    })
+  },
   data() {
-    const userInfo = this.$store.state.login.authedUser;
     return {
-      current: ['mail'],
-      openKeys: ['sub1'],
-      menus: userInfo.authObjMap && userInfo.authObjMap.MENU || []
     };
   },
   methods: {
     handleClick(e) {
-      console.log('click', e);
     },
     titleClick(e) {
-      console.log('titleClick', e);
     },
   },
 }

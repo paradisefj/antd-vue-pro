@@ -11,7 +11,7 @@
         <a-input
           v-decorator="[
             'userName',
-            {rules: [{ required: true, message: 'Please input your note!' }]}
+            {rules: [{ required: true, message: 'Please input your user name!' }]}
           ]"
         />
       </a-form-item>
@@ -21,9 +21,10 @@
         :wrapper-col="{ span: 12 }"
       >
         <a-input
+          type="password"
           v-decorator="[
             'password',
-            {rules: [{ required: true, message: 'Please input your note!' }]}
+            {rules: [{ required: true, message: 'Please input your password!' }]}
           ]"
         />
       </a-form-item>

@@ -9,6 +9,9 @@ async function login(userInfo) {
     body: userInfo
   })
 }
+async function current() {
+  return request(`/api/auth/currentUser`)
+}
 export default {
   namespaced: true,
   name: 'login',
@@ -29,6 +32,15 @@ export default {
           info: data.authedUser
         });
         router.push("/search");
+      }
+    },
+    *getCurrentUser() {
+      const data = yield call(current);
+      if(data) {
+        yield put({
+          type: 'login/AUTH_USER_LOGIN',
+          info: data
+        });
       }
     }
   },
